@@ -28,9 +28,6 @@ const Navbar = async () => {
             Sign In
           </Link>
         )}
-
-        {/* // button variant to make link look like a button */}
-        {/* <Link href="/sign-in" className={buttonVariants()}>Sign In</Link> */}
       </div>
     </div>
   )
