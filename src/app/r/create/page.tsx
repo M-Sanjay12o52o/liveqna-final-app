@@ -92,7 +92,7 @@ const Page = () => {
             <Button
               isLoading={isLoading}
               disabled={input.length === 0}
-              onClick={() => createCommunity()}
+              onClick={() => createCommunity(input)}
             >
               Create Community
             </Button>
