@@ -1,3 +1,4 @@
+import { PostValidator } from "@/lib/validators/post";
 import { SubredditSubscriptionValidator } from "@/lib/validators/subreddit";
 import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
@@ -15,7 +16,7 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     // validator
-    const { subredditId } = SubredditSubscriptionValidator.parse(body);
+    const { subredditId, title, content } = PostValidator.parse(body);
 
     // checking is the subscription already exists
     const subscriptionExists = await db.subscription.findFirst({
@@ -25,28 +26,34 @@ export async function POST(req: Request) {
       },
     });
 
-    if (subscriptionExists) {
-      return new Response("You are already subscribed to this subreddit.", {
+    if (!subscriptionExists) {
+      return new Response("Subscribe to post.", {
         status: 400,
       });
     }
 
-    // creating subscription for the user
-    await db.subscription.create({
+    await db.post.create({
       data: {
+        title,
+        content,
+        authorId: session.user.id,
         subredditId,
-        userId: session.user.id,
       },
     });
 
-    return new Response(subredditId);
+    return new Response("Ok");
   } catch (error) {
+    console.error("Error:", error); // Log the error message for debugging
+
     if (error instanceof z.ZodError) {
       return new Response("Invalid request data passed", { status: 422 });
     }
 
-    return new Response("Could not subscribe, please try again later", {
-      status: 500,
-    });
+    return new Response(
+      "Could not post to subreddit at this time, please try again later.",
+      {
+        status: 500,
+      }
+    );
   }
 }

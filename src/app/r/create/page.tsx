@@ -12,7 +12,7 @@ import { useCustomToasts } from "@/hooks/use-custom-toasts";
 const Page = () => {
   const [input, setInput] = useState("");
   const router = useRouter();
-  const { loginToast } = useCustomToast();
+  const { loginToast } = useCustomToasts();
 
   // tan stack query
   const { mutate: createCommunity, isLoading } = useMutation({
