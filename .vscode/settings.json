@@ -1,5 +1,10 @@
 {
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "cSpell.diagnosticLevel": "Hint"
+  "cSpell.diagnosticLevel": "Hint",
+  "cSpell.words": [
+    "Autosize",
+    "editorjs",
+    "hookform"
+  ]
 }
