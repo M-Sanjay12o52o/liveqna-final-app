@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
-import { useCustomToast } from "@/hooks/use-custom-toast";
+import { useCustomToasts } from "@/hooks/use-custom-toasts";
 
 const Page = () => {
   const [input, setInput] = useState("");
