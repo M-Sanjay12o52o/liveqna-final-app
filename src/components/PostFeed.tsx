@@ -2,13 +2,14 @@
 
 // getting post and updating post with scrolling
 
-import React, { FC, useRef } from "react";
+import React, { FC, useRef, useEffect } from "react";
 import { ExtendedPost } from "@/types/db";
 import { useIntersection } from "@mantine/hooks";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import Post from "./Post";
+import { INFINITE_SCROLLING_PAGINATION_RESULTS } from "@/config";
 
 interface PostFeedProps {
   initialPosts: ExtendedPost[];
@@ -30,7 +31,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
     ["infinite-query"],
     async ({ pageParam = 1 }) => {
       const query =
-        `/api/post?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=${pageParam}` +
+        `/api/posts?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=${pageParam}` +
         (!!subredditName ? `&subredditName=${subredditName}` : "");
 
       const { data } = await axios.get(query);
@@ -43,6 +44,12 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
       initialData: { pages: [initialPosts], pageParams: [1] },
     }
   );
+
+  useEffect(() => {
+    if(entry?.isIntersecting) {
+      fetchNextPage()
+    }
+  }, [entry, fetchNextPage])
 
   const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
 
