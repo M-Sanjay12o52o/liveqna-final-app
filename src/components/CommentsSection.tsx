@@ -33,7 +33,7 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
       <hr className="w-full h-px my-6" />
 
       {/* creating comments */}
-      <CreateComment />
+      <CreateComment postId={postId} />
 
       <div className="flex flex-col gap-y-6 mt-4">
         {comments
