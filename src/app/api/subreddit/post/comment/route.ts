@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
 import { z } from "zod";
+import { CommentValidator } from "@/lib/validators/comment";
 
 export async function PATCH(req: Request) {
   try {
@@ -9,6 +10,8 @@ export async function PATCH(req: Request) {
     const { postId, text, replyToId } = CommentValidator.parse(body);
 
     const session = await getAuthSession();
+
+    console.log("Session: ", session);
 
     if (!session.user) {
       return new Response("Unauthorized", { status: 401 });
@@ -21,7 +24,7 @@ export async function PATCH(req: Request) {
         authorId: session.user.id,
         replyToId,
       },
-    })
+    });
 
     return new Response("OK");
   } catch (error) {
