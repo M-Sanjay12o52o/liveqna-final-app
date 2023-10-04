@@ -46,10 +46,10 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
   );
 
   useEffect(() => {
-    if(entry?.isIntersecting) {
-      fetchNextPage()
+    if (entry?.isIntersecting) {
+      fetchNextPage();
     }
-  }, [entry, fetchNextPage])
+  }, [entry, fetchNextPage]);
 
   const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
 
