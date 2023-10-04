@@ -7,20 +7,14 @@ export async function PATCH(req: Request) {
   try {
     const session = await getAuthSession();
 
-    console.log("Session: " + session);
-
     if (!session?.user) {
       return new Response("Unauthorized", { status: 401 });
     }
 
     const body = await req.json();
 
-    console.log("Body: ", body);
-
     const { name } = UsernameValidator.parse(body);
-
-    console.log("Name: ", name);
-
+ 
     const username = await db.user.findFirst({
       where: {
         username: name,

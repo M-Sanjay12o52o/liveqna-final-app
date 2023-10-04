@@ -8,11 +8,11 @@ export const metadata = {
   description: "Manage account and website settings.",
 };
 
-export default async function SettingsPage() {
+const page = async ({}) => {
   const session = await getAuthSession();
 
   if (!session?.user) {
-    redirect(authOptions?.pages?.signIn || "/login");
+    redirect(authOptions?.pages?.signIn || "/sign-in");
   }
 
   return (
@@ -32,3 +32,5 @@ export default async function SettingsPage() {
     </div>
   );
 }
+
+export default page;
