@@ -8,7 +8,7 @@ import {ArrowBigUp, ArrowBigDown} from "lucide-react";
 import { cn } from '@/lib/utils'
 import { useMutation } from "@tanstack/react-query"
 import { PostVoteRequest } from "@/lib/validators/vote"
-import {axios, AxiosError} from "axios"
+import axios, { AxiosError} from "axios"
 import {toast} from "@/hooks/use-toast"
 
 interface PostVoteClientProps {
@@ -60,18 +60,18 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
         variant: 'destructive',
       })
     },
-    // onMutate: (type: VoteType) => {
-    //   if(currentVote === type) {
-    //     setCurrentVote(undefined)
-    //     if(type === 'UP') setVotesAmt((prev) => prev - 1)
-    //     else if(type === 'DOWN') setVotesAmt((prev) => prev + 1)
-    //   } else {
-    //     setCurrentVote(type)
-    //     if(type === 'UP') setVotesAmt((prev) => prev + (currentVote ? 2 : 1))
-    //     else if (type === 'DOWN') 
-    //       setVotesAmt((prev) => prev - (currentVote ? 2 : 1))
-    //   }
-    // },
+    onMutate: (type: VoteType) => {
+      if(currentVote === type) {
+        setCurrentVote(undefined)
+        if(type === 'UP') setVotesAmt((prev) => prev - 1)
+        else if(type === 'DOWN') setVotesAmt((prev) => prev + 1)
+      } else {
+        setCurrentVote(type)
+        if(type === 'UP') setVotesAmt((prev) => prev + (currentVote ? 2 : 1))
+        else if (type === 'DOWN') 
+          setVotesAmt((prev) => prev - (currentVote ? 2 : 1))
+      }
+    },
   })
 
   return <div className="flex sm:flex-col gap-4 sm:gap-0 pr-6 sm:w-20 pb-4 sm:pb-0">
