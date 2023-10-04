@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { redis } from "@/lib/redis";
 import { CachedPost } from "@/types/redis";
 import { Post, Vote } from "@prisma/client";

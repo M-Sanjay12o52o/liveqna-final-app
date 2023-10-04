@@ -1,8 +1,6 @@
 import { PostValidator } from "@/lib/validators/post";
-import { SubredditSubscriptionValidator } from "@/lib/validators/subreddit";
 import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
-import React from "react";
 import { z } from "zod";
 
 export async function POST(req: Request) {
@@ -43,8 +41,6 @@ export async function POST(req: Request) {
 
     return new Response("Ok");
   } catch (error) {
-    console.error("Error:", error); // Log the error message for debugging
-
     if (error instanceof z.ZodError) {
       return new Response("Invalid request data passed", { status: 422 });
     }

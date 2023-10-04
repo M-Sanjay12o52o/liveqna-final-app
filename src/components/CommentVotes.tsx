@@ -1,13 +1,12 @@
 "use client";
 
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 import { useCustomToasts } from "@/hooks/use-custom-toasts";
 import { usePrevious } from "@mantine/hooks";
 import { Button } from "@/components/ui/Button";
 import { ArrowBigUp, ArrowBigDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
-import { CommentVoteRequest } from "@/lib/validators/vote";
 import axios, { AxiosError } from "axios";
 import { toast } from "@/hooks/use-toast";
 import { CommentVote } from "@prisma/client";

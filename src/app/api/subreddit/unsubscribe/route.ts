@@ -1,13 +1,11 @@
 import { SubredditSubscriptionValidator } from "@/lib/validators/subreddit";
 import { db } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
-import React from "react";
 import { z } from "zod";
 
 export async function POST(req: Request) {
   try {
     const session = await getAuthSession();
-    console.log("getAuthSession result: " + session);
 
     if (!session?.user) {
       return new Response("Unauthorized", { status: 401 });
