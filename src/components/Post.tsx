@@ -1,12 +1,12 @@
 import React, { FC, useRef } from "react";
 import { formatTimeToNow } from "@/lib/utils";
 import Link from "next/link";
-import {MessageSquare} from "lucide-react";
+import { MessageSquare } from "lucide-react";
 import EditorOutput from "@/components/EditorOutput";
-import PostVoteClient from "@/components/post-vote/PostVoteClient"
+import PostVoteClient from "@/components/post-vote/PostVoteClient";
 
 // ts utility type - Pick
-type PartialVote = Pick<Vote, 'type'>
+type PartialVote = Pick<Vote, "type">;
 
 interface PostProps {
   subredditName: string;
@@ -16,24 +16,25 @@ interface PostProps {
   };
   commentAmt: number;
   votesAmt: number;
-  currentVote?: PartialVote
+  currentVote?: PartialVote;
 }
 
-const Post: FC<PostProps> = ({ 
-  subredditName, 
-  post, 
-  commentAmt, 
-  votesAmt: votesAmt, 
-  currentVote }) => {
+const Post: FC<PostProps> = ({
+  subredditName,
+  post,
+  commentAmt,
+  votesAmt: votesAmt,
+  currentVote,
+}) => {
   const pRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="rounded-md bg-white shadow">
       <div className="px-6 py-4 flex justify-between">
-        <PostVoteClient 
-        postId={post.id} 
-        initialVote={currentVote?.type} 
-        initialVotesAmt={votesAmt} 
+        <PostVoteClient
+          postId={post.id}
+          initialVote={currentVote?.type}
+          initialVotesAmt={votesAmt}
         />
         <div className="w-0 flex-1">
           <div className="max-h-40 mt-1 text-xs text-gray-500">
@@ -49,7 +50,7 @@ const Post: FC<PostProps> = ({
                 <span className="px-1">*</span>
               </>
             ) : null}
-            <span>Posted by u/{post.author.name}</span>{" "}
+            <span>Posted by u/{post.author.username}</span>{" "}
             {formatTimeToNow(new Date(post.createdAt))}
           </div>
 
@@ -63,8 +64,8 @@ const Post: FC<PostProps> = ({
             className="relative text-sm max-h-40 w-full overflow-clip"
             ref={pRef}
           >
-              {/* // to display content on post page  */}
-              <EditorOutput content={post.content} />
+            {/* // to display content on post page  */}
+            <EditorOutput content={post.content} />
 
             {pRef.current?.clientHeight === 160 ? (
               <div className="absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white to-transparent"></div>
