@@ -11,8 +11,6 @@ export async function PATCH(req: Request) {
 
     const session = await getAuthSession();
 
-    console.log("Session: ", session);
-
     if (!session.user) {
       return new Response("Unauthorized", { status: 401 });
     }
