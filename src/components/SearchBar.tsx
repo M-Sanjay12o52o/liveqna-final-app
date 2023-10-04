@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useState, useRef, useEffect } from "react";
 import {
   Command,
   CommandInput,
@@ -16,6 +16,8 @@ import { Prisma, Subreddit } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { Users } from "lucide-react";
 import debounce from "lodash.debounce";
+import { useOnClickOutside } from "@/hooks/use-on-click-outside";
+import { usePathname } from "next/navigation";
 
 interface SearchBarProps {}
 
@@ -48,9 +50,23 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
   }, []);
 
   const router = useRouter();
+  // for search results to go away on click away from search bar
+  const commandRef = useRef<HTMLDivElement>(null);
+  const pathName = usePathname();
+
+  useOnClickOutside(commandRef, () => {
+    setInput("");
+  });
+
+  useEffect(() => {
+    setInput("");
+  }, [pathName]);
 
   return (
-    <Command className="relative rounded-lg border max-w-lg z-50 overflow-visible">
+    <Command
+      ref={commandRef}
+      className="relative rounded-lg border max-w-lg z-50 overflow-visible"
+    >
       <CommandInput
         value={input}
         onValueChange={(text) => {
