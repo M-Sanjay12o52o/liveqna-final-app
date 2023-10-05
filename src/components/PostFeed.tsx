@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import React, { FC, useRef, useEffect } from "react";
+import React, { FC, useRef, useEffect, useState } from "react";
 import { ExtendedPost } from "@/types/db";
 import { useIntersection } from "@mantine/hooks";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -22,6 +22,8 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
   });
 
   const { data: session } = useSession();
+
+  const [sortedPosts, setSortedPosts] = useState<ExtendedPost[]>(initialPosts);
 
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     ["infinite-query"],
@@ -47,13 +49,20 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
     }
   }, [entry, fetchNextPage]);
 
-  // Combining initial posts with the fetched posts and sorting by upvotes in descending order
-  const sortedPosts = data?.pages.flatMap((page) => page) ?? initialPosts;
-  sortedPosts.sort((a, b) => {
-    const upvotesA = a.votes.filter(vote => vote.type === "UP").length;
-    const upvotesB = b.votes.filter(vote => vote.type === "UP").length;
-    return upvotesB - upvotesA;
-  });
+  useEffect(() => {
+    // Combining initial posts with the fetched posts and sorting by upvotes in descending order, with stable sorting
+    const sortedPosts = data?.pages.flatMap((page) => page) ?? initialPosts;
+    sortedPosts.sort((a, b) => {
+      const upvotesA = a.votes.filter(vote => vote.type === "UP").length;
+      const upvotesB = b.votes.filter(vote => vote.type === "UP").length;
+      if (upvotesA !== upvotesB) {
+        return upvotesB - upvotesA;
+      } else {
+        return a.id - b.id; // stable sort by id
+      }
+    });
+    setSortedPosts(sortedPosts);
+  }, [data]);
 
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
