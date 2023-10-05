@@ -1,7 +1,5 @@
 "use client";
 
-// getting post and updating post with scrolling
-
 import React, { FC, useRef, useEffect } from "react";
 import { ExtendedPost } from "@/types/db";
 import { useIntersection } from "@mantine/hooks";
@@ -23,10 +21,8 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
     threshold: 1,
   });
 
-  // getting session on the client side
   const { data: session } = useSession();
 
-  // handling infinite scrolling
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     ["infinite-query"],
     async ({ pageParam = 1 }) => {
@@ -51,26 +47,29 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
     }
   }, [entry, fetchNextPage]);
 
-  const posts = data?.pages.flatMap((page) => page) ?? initialPosts;
+  // Combining initial posts with the fetched posts and sorting by upvotes in descending order
+  const sortedPosts = data?.pages.flatMap((page) => page) ?? initialPosts;
+  sortedPosts.sort((a, b) => {
+    const upvotesA = a.votes.filter(vote => vote.type === "UP").length;
+    const upvotesB = b.votes.filter(vote => vote.type === "UP").length;
+    return upvotesB - upvotesA;
+  });
 
   return (
     <ul className="flex flex-col col-span-2 space-y-6">
-      {posts.map((post, index) => {
+      {sortedPosts.map((post, index) => {
         const votesAmt = post.votes.reduce((acc, vote) => {
           if (vote.type === "UP") return acc + 1;
           if (vote.type === "DOWN") return acc - 1;
           return acc;
         }, 0);
 
-        // checking if the user has already voted
         const currentVote = post.votes.find((vote) => {
-          vote.userId === session?.user.id;
+          return vote.userId === session?.user.id; // fixed the missing return statement here
         });
 
-        // displaying posts
-        if (index === posts.length - 1) {
+        if (index === sortedPosts.length - 1) {
           return (
-            // ref from the hook useIntersection
             <li key={post.id} ref={ref}>
               <Post
                 currentVote={currentVote}
@@ -83,14 +82,15 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
           );
         } else {
           return (
-            <Post
-              key={post.id}
-              currentVote={currentVote}
-              votesAmt={votesAmt}
-              commentAmt={post.comments.length}
-              post={post}
-              subredditName={post.subreddit.name}
-            />
+            <li key={post.id}>
+              <Post
+                currentVote={currentVote}
+                votesAmt={votesAmt}
+                commentAmt={post.comments.length}
+                post={post}
+                subredditName={post.subreddit.name}
+              />
+            </li>
           );
         }
       })}
