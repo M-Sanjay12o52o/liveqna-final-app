@@ -1,126 +1,107 @@
-"use client";
-
-import React from "react";
-import { startTransition } from "react";
-import { Button } from "@/components/ui/Button";
-import { useToast } from "../hooks/use-toast";
-import { useCustomToasts } from "@/hooks/use-custom-toasts";
-import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
-import { SubscribeToSubredditPayload } from "@/lib/validators/subreddit";
+'use client'
+import { Button } from '@/components/ui/Button'
+import { SubscribeToSubredditPayload } from '@/lib/validators/subreddit'
+import { useMutation } from '@tanstack/react-query'
+import axios, { AxiosError } from 'axios'
+import { useRouter } from 'next/navigation'
+import { startTransition } from 'react'
+import { useToast } from '../hooks/use-toast'
+import { useCustomToasts } from '@/hooks/use-custom-toasts'
 
 interface SubscribeLeaveToggleProps {
-  subredditId: string;
-  isSubscribed: boolean;
-  subredditName: string;
+  isSubscribed: boolean
+  subredditId: string
+  subredditName: string
 }
 
-const SubscribeLeaveToggle = ({ subredditId, isSubscribed, subredditName }) => {
-  const { loginToast } = useCustomToasts();
-  const router = useRouter();
+const SubscribeLeaveToggle = ({
+  isSubscribed,
+  subredditId,
+  subredditName,
+}: SubscribeLeaveToggleProps) => {
+  const { toast } = useToast()
+  const { loginToast } = useCustomToasts()
+  const router = useRouter()
 
   const { mutate: subscribe, isLoading: isSubLoading } = useMutation({
-    // to submit our data to the api
     mutationFn: async () => {
       const payload: SubscribeToSubredditPayload = {
         subredditId,
-      };
+      }
 
-      const { data } = await axios.post("/api/subreddit/subscribe", payload);
-      // we are passing this because we own the endpoint and we are going to return a string from here
-      return data as string;
+      const { data } = await axios.post('/api/subreddit/subscribe', payload)
+      return data as string
     },
-
-    // error handling
     onError: (err) => {
       if (err instanceof AxiosError) {
         if (err.response?.status === 401) {
-          return loginToast();
+          return loginToast()
         }
       }
 
       return toast({
-        title: "There was a problem",
-        description: "Something went wrong, please try again later",
-        variant: "destructive",
-      });
+        title: 'There was a problem.',
+        description: 'Something went wrong. Please try again.',
+        variant: 'destructive',
+      })
     },
-
     onSuccess: () => {
-      // this is from react
       startTransition(() => {
-        router.refresh();
-      });
-
-      return toast({
-        title: "Subscribed",
-        // name received from props
+        // Refresh the current route and fetch new data from the server without
+        // losing client-side browser or React state.
+        router.refresh()
+      })
+      toast({
+        title: 'Subscribed!',
         description: `You are now subscribed to r/${subredditName}`,
-      });
+      })
     },
-  });
+  })
 
-  // unsubscribe request
-
-  const { mutate: unsubscribe, isLoading: isUnSubLoading } = useMutation({
-    // to submit our data to the api
+  const { mutate: unsubscribe, isLoading: isUnsubLoading } = useMutation({
     mutationFn: async () => {
       const payload: SubscribeToSubredditPayload = {
         subredditId,
-      };
-
-      const { data } = await axios.post("/api/subreddit/unsubscribe", payload);
-      // we are passing this because we own the endpoint and we are going to return a string from here
-      return data as string;
-    },
-
-    // error handling
-    onError: (err) => {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 401) {
-          return loginToast();
-        }
       }
 
-      return toast({
-        title: "There was a problem",
-        description: "Something went wrong, please try again later",
-        variant: "destructive",
-      });
+      const { data } = await axios.post('/api/subreddit/unsubscribe', payload)
+      return data as string
     },
-
+    onError: (err: AxiosError) => {
+      toast({
+        title: 'Error',
+        description: err.response?.data as string,
+        variant: 'destructive',
+      })
+    },
     onSuccess: () => {
-      // this is from react
       startTransition(() => {
-        router.refresh();
-      });
-
-      return toast({
-        title: "Unsubscribed",
-        // name received from props
-        description: `You are now unsubscribed from r/${subredditName}`,
-      });
+        // Refresh the current route and fetch new data from the server without
+        // losing client-side browser or React state.
+        router.refresh()
+      })
+      toast({
+        title: 'Unsubscribed!',
+        description: `You are now unsubscribed from/${subredditName}`,
+      })
     },
-  });
+  })
 
   return isSubscribed ? (
     <Button
-      onClick={() => unsubscribe()}
-      isLoading={isUnSubLoading}
-      className="w-full mt-1 mb-4"
-    >
+      className='w-full mt-1 mb-4'
+      isLoading={isUnsubLoading}
+      onClick={() => unsubscribe()}>
       Leave community
     </Button>
   ) : (
     <Button
+      className='w-full mt-1 mb-4'
       isLoading={isSubLoading}
-      onClick={() => subscribe()}
-      className="w-full mt-1 mb-4"
-    >
-      Join to Post
+      onClick={() => subscribe()}>
+      Join to post
     </Button>
-  );
-};
+  )
+}
 
-export default SubscribeLeaveToggle;
+export default SubscribeLeaveToggle

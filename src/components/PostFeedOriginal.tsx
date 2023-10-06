@@ -1,6 +1,6 @@
 'use client'
 
-import { INFINITE_SCROLLING_PAGINATION_RESULTS   } from '@/config'
+import { INFINITE_SCROLLING_PAGINATION_RESULTS } from '@/config'
 import { ExtendedPost } from '@/types/db'
 import { useIntersection } from '@mantine/hooks'
 import { useInfiniteQuery } from '@tanstack/react-query'
