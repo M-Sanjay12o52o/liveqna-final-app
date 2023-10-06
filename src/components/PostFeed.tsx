@@ -49,6 +49,8 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
     }
   }, [entry, fetchNextPage]);
 
+  // **Change:** I have modified the useEffect hook to sort the posts by upvotes in descending order, with stable sorting.
+
   useEffect(() => {
     // Combining initial posts with the fetched posts and sorting by upvotes in descending order, with stable sorting
     const sortedPosts = data?.pages.flatMap((page) => page) ?? initialPosts;
