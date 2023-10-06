@@ -1,5 +1,3 @@
-"use client";
-
 import { FC, useState, useEffect } from "react";
 import { useCustomToasts } from "@/hooks/use-custom-toasts";
 import { usePrevious } from "@mantine/hooks";
@@ -31,7 +29,6 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
     setCurrentVote(initialVote);
   }, [initialVote]);
 
-  // voting functionality
   const { mutate: vote } = useMutation({
     mutationFn: async (voteType: VoteType) => {
       const payload: PostVoteRequest = {
@@ -45,7 +42,6 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
       if (voteType === "UP") setVotesAmt((prev) => prev - 1);
       else setVotesAmt((prev) => prev + 1);
 
-      // reset current vote
       setCurrentVote(prevVote);
 
       if (err instanceof AxiosError) {
@@ -84,7 +80,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
       >
         <ArrowBigUp
           className={cn("h-5 w-5 text-zinc-700", {
-            "text-emerald-500 fill-emerald-500": currentVote === "UP",
+            "text-emerald-500 fill-emerald-500": currentVote === "UP" && currentVote !== null,
           })}
         />
       </Button>
@@ -97,11 +93,11 @@ const PostVoteClient: FC<PostVoteClientProps> = ({
         onClick={() => vote("DOWN")}
         size="sm"
         variant="ghost"
-        aria-label="upvote"
+        aria-label="downvote"
       >
         <ArrowBigDown
           className={cn("h-5 w-5 text-zinc-700", {
-            "text-red-500 fill-emerald-500": currentVote === "DOWN",
+            "text-red-500 fill-red-500": currentVote === "DOWN" && currentVote !== null,
           })}
         />
       </Button>

@@ -9,6 +9,11 @@ import Icon from "@/components/Icon"
 export const metadata = {
   title: "Upvote",
   description: "Online Q&A Platform.",
+  icons: {
+    icon: [
+      '/favicon.ico',
+    ],
+  },
 };
 
 const inter = Inter({ subsets: ["latin"] });
