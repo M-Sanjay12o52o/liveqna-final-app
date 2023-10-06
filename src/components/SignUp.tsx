@@ -20,7 +20,7 @@ const SignUp = () => {
           href="/sign-in"
           className="hover:text-brand text-sm underline underline-offset-4"
         >
-          Sign in
+          Sign Up
         </Link>
       </p>
     </div>
