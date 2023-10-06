@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, useState, useEffect } from "react";
 import { useCustomToasts } from "@/hooks/use-custom-toasts";
 import { usePrevious } from "@mantine/hooks";
