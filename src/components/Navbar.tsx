@@ -2,9 +2,9 @@ import Link from "next/link";
 import { Icons } from "./Icons";
 import { buttonVariants } from "./ui/Button";
 import { getAuthSession } from "@/lib/auth";
-import { User } from "lucide-react";
 import UserAccountNav from "./UserAccountNav";
 import SearchBar from "@/components/SearchBar";
+import Icon from "@/components/Icon";
 
 const Navbar = async () => {
   const session = await getAuthSession();
@@ -14,11 +14,17 @@ const Navbar = async () => {
       <div className="container max-w-7xl h-full mx-auto flex items-center justify-between gap-2">
         {/* logo */}
         <Link href="/" className="flex gap-2 items-center">
-          <Icons.logo className="h-8 w-8 sm:h-6 sm:w-6" />
+          <Icon/>
           <p className="hidden text-zinc-700 text-sm font-medium md:block">
-            Bredit
+            Upvote
           </p>
         </Link>
+        {/* <Link href="/" className="flex gap-2 items-center">
+          <Icons.logo className="h-8 w-8 sm:h-6 sm:w-6" />
+          <p className="hidden text-zinc-700 text-sm font-medium md:block">
+            Upvote
+          </p>
+        </Link> */}
 
         {/* search bar */}
         <SearchBar />

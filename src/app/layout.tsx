@@ -4,10 +4,11 @@ import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import Providers from "@/components/Providers";
+import Icon from "@/components/Icon"
 
 export const metadata = {
-  title: "Breadit",
-  description: "A Reddit clone built with Next.js and TypeScript.",
+  title: "Upvote",
+  description: "Online Q&A Platform.",
 };
 
 const inter = Inter({ subsets: ["latin"] });
