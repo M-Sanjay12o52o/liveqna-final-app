@@ -2,7 +2,7 @@ import React from "react";
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import Editor from "@/components/Editor";
+import {Editor} from "@/components/Editor";
 
 // getting access to dynamic routes to get access to params
 
