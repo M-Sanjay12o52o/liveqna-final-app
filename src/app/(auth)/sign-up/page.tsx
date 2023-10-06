@@ -15,7 +15,7 @@ const page = () => {
             "self-start -mt-20"
           )}
         >
-          <ChevronLeft clasName="mr-2 h-4 w-4" />
+          <ChevronLeft className="mr-2 h-4 w-4" />
           Home
         </Link>
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { MessageSquare } from "lucide-react";
 import EditorOutput from "@/components/EditorOutput";
 import PostVoteClient from "@/components/post-vote/PostVoteClient";
+import type { Vote, Post, User } from "@prisma/client";
 
 // ts utility type - Pick
 type PartialVote = Pick<Vote, "type">;
